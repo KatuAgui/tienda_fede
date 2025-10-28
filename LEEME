@@ -1,0 +1,14 @@
+COMANDOS
+CREAR PROYECTO DE NODEJS
+npm init -y
+INSTALAR EXPRESS
+npm install express 
+INSTALAR NODEMON
+npm install -D nodemon
+
+CON ESTO POR DEFECTO TENEMOS node_modules, package_json
+
+npm install express mysql2 dotenv
+npm install -D typescript ts-node-dev @types/node @types/express
+
+npm install -D @types/cors
