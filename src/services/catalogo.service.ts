@@ -63,4 +63,47 @@ export class CatalogoService {
     const connection = await connectDB();
     await connection.execute("DELETE FROM catalogo_inventario_producto WHERE idCatalogo=?", [idCatalogo]);
   }
+
+   async listarInventariosConStockTotal(): Promise<any[]> {
+    const connection = await connectDB();
+    const [rows] = await connection.execute(`
+      SELECT 
+        i.idInventario,
+        i.nombreInventario,
+        i.ubicacion,
+        i.fechaCreacion,
+        SUM(c.stock) AS stockTotal
+      FROM inventarios i
+      LEFT JOIN catalogo_inventario_producto c ON i.idInventario = c.idInventario
+      GROUP BY i.idInventario, i.nombreInventario, i.ubicacion, i.fechaCreacion
+      ORDER BY i.nombreInventario ASC
+    `);
+    return rows as any[];
+  }
+
+    async listarProductosPorInventario(idInventario: number): Promise<any[]> {
+    const connection = await connectDB();
+    const [rows] = await connection.execute(
+      `
+      SELECT 
+        i.idInventario,
+        i.nombreInventario,
+        i.ubicacion,
+        p.id AS idProducto,
+        p.nombre AS nombreProducto,
+        p.precio AS precioVenta,
+        c.idCatalogo,
+        c.stock,
+        c.stockMinimo,
+        c.precioCompra
+      FROM catalogo_inventario_producto c
+      INNER JOIN inventarios i ON c.idInventario = i.idInventario
+      INNER JOIN productos p ON c.idProducto = p.id
+      WHERE c.idInventario = ?
+      ORDER BY p.nombre ASC
+      `,
+      [idInventario]
+    );
+    return rows as any[];
+  }
 }

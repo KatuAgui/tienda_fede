@@ -4,7 +4,9 @@ import {
   buscarCatalogoPorInventario,
   crearCatalogo,
   actualizarCatalogo,
-  eliminarCatalogo
+  eliminarCatalogo,
+  listarInventariosConStockTotal,
+  listarProductosPorInventario
 } from "../controllers/catalogo.controller";
 
 const router = Router();
@@ -13,7 +15,7 @@ const router = Router();
 router.get("/", obtenerCatalogo);
 
 // 🔹 Buscar productos de un inventario específico
-router.get("/inventario/:idInventario", buscarCatalogoPorInventario);
+router.get("/buscar/inventario/:idInventario", buscarCatalogoPorInventario);
 
 // 🔹 Agregar nuevo registro al catálogo
 router.post("/", crearCatalogo);
@@ -23,5 +25,10 @@ router.put("/:id", actualizarCatalogo);
 
 // 🔹 Eliminar producto del catálogo
 router.delete("/:id", eliminarCatalogo);
+
+router.get("/inventarios-stock", listarInventariosConStockTotal);
+
+// 🔹 Obtener todos los productos de un inventario específico
+router.get("/productos/inventario/:idInventario", listarProductosPorInventario);
 
 export default router;

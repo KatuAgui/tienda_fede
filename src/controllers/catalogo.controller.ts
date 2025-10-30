@@ -64,3 +64,25 @@ export const eliminarCatalogo = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error al eliminar producto del catálogo" });
   }
 };
+
+export const listarInventariosConStockTotal = async (req: Request, res: Response) => {
+  try {
+    const inventarios = await servicio.listarInventariosConStockTotal();
+    res.json(inventarios);
+  } catch (error) {
+    console.error("Error al listar inventarios con stock total:", error);
+    res.status(500).json({ error: "Error al obtener inventarios con stock total" });
+  }
+};
+
+// 🔹 NUEVO 2: Listar todos los productos de un inventario
+export const listarProductosPorInventario = async (req: Request, res: Response) => {
+  const { idInventario } = req.params;
+  try {
+    const productos = await servicio.listarProductosPorInventario(Number(idInventario));
+    res.json(productos);
+  } catch (error) {
+    console.error("Error al listar productos del inventario:", error);
+    res.status(500).json({ error: "Error al listar productos del inventario" });
+  }
+};
