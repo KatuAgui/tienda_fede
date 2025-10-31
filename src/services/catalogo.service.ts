@@ -81,29 +81,32 @@ export class CatalogoService {
     return rows as any[];
   }
 
-    async listarProductosPorInventario(idInventario: number): Promise<any[]> {
-    const connection = await connectDB();
-    const [rows] = await connection.execute(
-      `
-      SELECT 
-        i.idInventario,
-        i.nombreInventario,
-        i.ubicacion,
-        p.id AS idProducto,
-        p.nombre AS nombreProducto,
-        p.precio AS precioVenta,
-        c.idCatalogo,
-        c.stock,
-        c.stockMinimo,
-        c.precioCompra
-      FROM catalogo_inventario_producto c
-      INNER JOIN inventarios i ON c.idInventario = i.idInventario
-      INNER JOIN productos p ON c.idProducto = p.id
-      WHERE c.idInventario = ?
-      ORDER BY p.nombre ASC
-      `,
-      [idInventario]
-    );
-    return rows as any[];
-  }
+   async listarProductosPorInventario(idInventario: number): Promise<any[]> {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(
+    `
+    SELECT 
+      i.idInventario,
+      i.nombreInventario,
+      i.ubicacion,
+      p.id AS idProducto,
+      p.nombre AS nombreProducto,
+      p.precio AS precioVenta,
+      c.idCatalogo,
+      c.stock,
+      c.stockMinimo,
+      c.precioCompra
+    FROM catalogo_inventario_producto c
+    INNER JOIN inventarios i ON c.idInventario = i.idInventario
+    INNER JOIN productos p ON c.idProducto = p.id
+    WHERE c.idInventario = ?
+    ORDER BY p.nombre ASC
+    `,
+    [idInventario]
+  );
+
+  // 🔹 Convertir los RowDataPackets a objetos JSON normales
+  return JSON.parse(JSON.stringify(rows));
+}
+
 }
