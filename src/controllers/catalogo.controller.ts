@@ -75,14 +75,17 @@ export const listarInventariosConStockTotal = async (req: Request, res: Response
   }
 };
 
-// 🔹 NUEVO 2: Listar todos los productos de un inventario
 export const listarProductosPorInventario = async (req: Request, res: Response) => {
   const { idInventario } = req.params;
   try {
     const productos = await servicio.listarProductosPorInventario(Number(idInventario));
-    res.json(productos);
+
+    console.log("Productos encontrados:", productos.length);
+    console.log("Contenido del array:", productos);
+
+    res.json(productos); // ✅ aquí devolvemos todo el array, no [0]
   } catch (error) {
-    console.error("Error al listar productos del inventario:", error);
-    res.status(500).json({ error: "Error al listar productos del inventario" });
+    console.error("Error al listar productos:", error);
+    res.status(500).json({ error: "Error al listar productos por inventario" });
   }
 };
